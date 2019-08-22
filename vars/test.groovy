@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def call(){
+def call(Map param){
 pipeline {
     agent {
         node {
@@ -26,8 +26,8 @@ pipeline {
         stage('Deliver') {
             steps {
                 sh './jenkins/scripts/deliver.sh'
-		sh 'scp /var/lib/jenkins/workspace/test/target/my-app-1.0-SNAPSHOT.jar root@192.168.99.101:/home/revina/'
-		sh 'ssh root@192.168.99.101 \'java -jar /home/revina/my-app-1.0-SNAPSHOT.jar\''
+		sh "scp /var/lib/jenkins/workspace/test/target/my-app-1.0-SNAPSHOT.jar root@${param.hostname}:/home/revina/"
+		sh "ssh root@${param.hostname} \'java -jar /home/revina/my-app-1.0-SNAPSHOT.jar\'"
             }
         }
     }
